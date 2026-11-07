@@ -448,12 +448,17 @@ class ReserveAmerica(BaseProvider):
         if equipment:
             for eq_name, eq_len in equipment:
                 site_type_id = ReserveAmericaConfig.SITE_TYPE_MAPPING.get(
-                    eq_name.lower()
+                    str(eq_name).lower()
                 )
                 if site_type_id is not None:
                     extra_params["pa99999"] = site_type_id
-                if eq_len is not None and eq_len > 0:
-                    extra_params["109"] = int(eq_len)
+                if eq_len is not None:
+                    try:
+                        parsed_len = int(round(float(eq_len)))
+                        if parsed_len > 0:
+                            extra_params["109"] = parsed_len
+                    except (ValueError, TypeError):
+                        pass
 
         all_records: List[ReserveAmericaCampsiteRecord] = []
         page = 0

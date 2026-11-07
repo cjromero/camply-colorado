@@ -326,7 +326,10 @@ def test_search_colorado_state_parks_end_to_end(tmp_path: pathlib.Path) -> None:
             return _mock_json_response(SAMPLE_SEARCH_RESPONSE)
         return _mock_json_response(SAMPLE_CAMPSITES_RESPONSE)
 
-    with mock.patch("requests.Session.get", side_effect=side_effect):
+    with mock.patch(
+        "camply.providers.reserve_america.ColoradoStateParks.__offline_cache_dir__",
+        tmp_path,
+    ), mock.patch("requests.Session.get", side_effect=side_effect):
         searcher = SearchColoradoStateParks(
             search_window=window,
             campgrounds=[50022],
