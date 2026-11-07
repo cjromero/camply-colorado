@@ -5,6 +5,7 @@ Config __init__ file
 from .api_config import (
     STANDARD_HEADERS,
     RecreationBookingConfig,
+    ReserveAmericaConfig,
     RIDBConfig,
     YellowstoneConfig,
 )
@@ -39,5 +40,6 @@ __all__ = [
     "TwilioConfig",
     "SearchConfig",
     "YellowstoneConfig",
+    "ReserveAmericaConfig",
     "EquipmentOptions",
 ]

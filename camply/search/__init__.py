@@ -13,6 +13,10 @@ from camply.search.search_recreationdotgov import (
     SearchRecreationDotGovTicket,
     SearchRecreationDotGovTimedEntry,
 )
+from camply.search.search_reserve_america import (
+    SearchColoradoStateParks,
+    SearchReserveAmerica,
+)
 from camply.search.search_usedirect import (
     SearchAlabamaStateParks,
     SearchArizonaStateParks,
@@ -52,6 +56,9 @@ __search_providers__: List[Type[BaseCampingSearch]] = [
     SearchRecreationDotGovTimedEntry,
     SearchRecreationDotGovDailyTicket,
     SearchRecreationDotGovDailyTimedEntry,
+    # ReserveAmerica
+    SearchReserveAmerica,
+    SearchColoradoStateParks,
 ]
 
 CAMPSITE_SEARCH_PROVIDER: Dict[str, Type[BaseCampingSearch]] = {

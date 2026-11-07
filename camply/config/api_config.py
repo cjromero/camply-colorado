@@ -202,3 +202,33 @@ class YellowstoneConfig(DataColumns, APIConfig):
                 facility_id=str(key),
             )
         )
+
+
+class ReserveAmericaConfig(APIConfig):
+    """
+    ReserveAmerica API Configuration
+    """
+
+    SIGNIN_URL: str = "https://www.reserveamerica.com/signin"
+    BASE_URL: str = "https://www.reserveamerica.com"
+    API_BASE_URL: str = "https://api.reserveamerica.com/jaxrs-json"
+    SEARCH_ENDPOINT: str = f"{API_BASE_URL}/search"
+    FACILITIES_ENDPOINT: str = f"{API_BASE_URL}/facilities"
+    PRODUCTS_ENDPOINT: str = f"{API_BASE_URL}/products"
+    DATE_FORMAT: str = "%Y-%m-%d"
+    DEFAULT_STATE: str = "CO"
+    DEFAULT_CONTRACT: str = "CO"
+    REQUEST_CLIENT_HEADER: Dict[str, str] = {
+        "Ao-Requestclient": "RA Camping_4.20.0.3_Android_ALL"
+    }
+    SITE_TYPE_MAPPING: Dict[str, int] = {
+        "rv": 2001,
+        "trailer": 2002,
+        "tent": 2003,
+        "boat": 2004,
+        "horse": 3001,
+        "tent-only": 3100,
+        "yurt": 3102,
+        "group": 9002,
+        "cabin": 10001,
+    }

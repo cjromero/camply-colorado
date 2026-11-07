@@ -137,6 +137,7 @@ node_modules/
 
 # Camply Data Files
 camply/providers/usedirect/*/*.json
+camply/providers/reserve_america/*/*.json
 
 # Camply Requirements Files
 requirements/*.bak
