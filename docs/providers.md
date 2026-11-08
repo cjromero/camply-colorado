@@ -159,3 +159,29 @@ ReserveCalifornia is one of many providers that use the UseDirect API. The follo
 - **`FairfaxCountyParks`**: Searches on [fairfax.usedirect.com](https://fairfax.usedirect.com) for Campsites (Virginia)
 - **`MaricopaCountyParks`**: Searches on [MaricopaCountyParks.org](https://maricopacountyparks.org) for Campsites (Arizona)
 - **`OregonMetro`**: Searches on [OregonMetro.gov](https://oregonmetro.gov) for Campsites (Portland Metro)
+
+### ReserveAmerica, ColoradoStateParks, & LarimerCounty
+
+[ReserveAmerica](https://www.reserveamerica.com) powers camping reservations for numerous state and county park systems across North America, including **Colorado Parks and Wildlife (`ColoradoStateParks`)** and **Larimer County Parks (`LarimerCounty` / [larimercamping.com](https://www.larimercamping.com/unifSearch.do))**.
+
+- **`ReserveAmerica`**: Searches across ReserveAmerica state and county park facilities (`--state` supported)
+- **`ColoradoStateParks`**: Searches Colorado State Parks ([cpwshop.com](https://www.cpwshop.com), contract `CO`)
+- **`LarimerCounty`**: Searches Larimer County Department of Natural Resources parks ([larimercamping.com](https://www.larimercamping.com/unifSearch.do), contract `LARC`, including Horsetooth Reservoir, Carter Lake, Flatiron Reservoir, Pinewood Reservoir, and Hermit Park)
+
+```commandline
+camply campgrounds --provider ColoradoStateParks --search "Mueller"
+```
+
+```commandline
+camply campgrounds --provider LarimerCounty --search "Horsetooth"
+```
+
+```commandline
+camply campsites \
+    --provider LarimerCounty \
+    --campground 710105 \
+    --start-date 2026-11-13 \
+    --end-date 2026-11-15 \
+    --nights 2 \
+    --equipment Trailer 25
+```

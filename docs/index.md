@@ -39,6 +39,7 @@ to book your spot!
     - [Yellowstone](providers.md#yellowstone)
     - [GoingToCamp](providers.md#goingtocamp)
     - [RecDotGov Tours + Tickets + Timed Entry](providers.md#recreationgov-tickets-tours-timed-entry)
+    - [ReserveAmerica, ColoradoStateParks, & LarimerCounty](providers.md#reserveamerica-coloradostateparks-larimercounty)
 - [Command Line Usage](command_line_usage.md)
     - [Simple Examples](command_line_usage.md#simple-examples)
     - [providers](command_line_usage.md#providers)

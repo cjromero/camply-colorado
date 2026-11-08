@@ -11,15 +11,19 @@ import pytest
 import requests
 
 from camply.containers import AvailableCampsite, SearchWindow
-from camply.providers import ColoradoStateParks, ReserveAmerica
+from camply.providers import ColoradoStateParks, LarimerCounty, ReserveAmerica
 from camply.providers.reserve_america import ReserveAmericaError
-from camply.search import SearchColoradoStateParks, SearchReserveAmerica
+from camply.search import (
+    SearchColoradoStateParks,
+    SearchLarimerCounty,
+    SearchReserveAmerica,
+)
 
 SAMPLE_SEARCH_RESPONSE = {
-    "totalRecords": 2,
+    "totalRecords": 3,
     "totalPages": 1,
     "startIndex": 0,
-    "endIndex": 1,
+    "endIndex": 2,
     "control": {"currentPage": 0, "pageSize": 20},
     "records": [
         {
@@ -73,6 +77,49 @@ SAMPLE_SEARCH_RESPONSE = {
                 "hiddenOnMap": False,
                 "crossOverCustomLanding": False,
                 "legacyRequired": False,
+                "lineOfBusinesses": ["CAMPING", "DAYUSE"],
+                "nonClientFacility": False,
+            },
+        },
+        {
+            "type": "camping",
+            "namingId": "LARC_710105",
+            "namingLabel": "Horsetooth Reservoir",
+            "id": 710105,
+            "name": "Horsetooth Reservoir",
+            "targetItem": False,
+            "matchingFilters": True,
+            "reservableType": None,
+            "available": False,
+            "proximity": 0.0,
+            "summary": None,
+            "details": {
+                "id": 710105,
+                "contrCode": "LARC",
+                "stateCodes": ["CO"],
+                "name": "Horsetooth Reservoir",
+                "baseURL": "https://www.larimercamping.com/camping/horsetooth-reservoir/r/facilityDetails.do?contractCode=LARC&parkId=710105",
+                "imageURL": "/webphotos/LARC/pid710105/0/180x120.jpg",
+                "verifiableAvailability": True,
+                "affiliation": {
+                    "facilityID": 0,
+                    "name": "",
+                    "url": None,
+                    "agencies": [
+                        {
+                            "id": 710003,
+                            "code": "Larimer Agency",
+                            "name": "Larimer County Agency",
+                        }
+                    ],
+                },
+                "facilityTypes": ["camping"],
+                "dayUse": True,
+                "dayUseOnly": False,
+                "coordinates": {
+                    "latitude": 40.5294444,
+                    "longitude": -105.165,
+                },
                 "lineOfBusinesses": ["CAMPING", "DAYUSE"],
                 "nonClientFacility": False,
             },
@@ -326,9 +373,8 @@ def test_search_colorado_state_parks_end_to_end(tmp_path: pathlib.Path) -> None:
             return _mock_json_response(SAMPLE_SEARCH_RESPONSE)
         return _mock_json_response(SAMPLE_CAMPSITES_RESPONSE)
 
-    with mock.patch(
-        "camply.providers.reserve_america.ColoradoStateParks.__offline_cache_dir__",
-        tmp_path,
+    with mock.patch.object(
+        ColoradoStateParks, "__offline_cache_dir__", tmp_path
     ), mock.patch("requests.Session.get", side_effect=side_effect):
         searcher = SearchColoradoStateParks(
             search_window=window,
@@ -341,3 +387,81 @@ def test_search_colorado_state_parks_end_to_end(tmp_path: pathlib.Path) -> None:
             "141",
             "Arapahoe Group Site",
         }
+
+
+def test_larimer_county_find_campgrounds_and_equipment_filter(
+    tmp_path: pathlib.Path,
+) -> None:
+    """
+    Verify LarimerCounty filters to LARC contract (Horsetooth Reservoir 710105)
+    and sends pa99999 and pa109 query parameters for equipment filtering
+    """
+    prov = LarimerCounty()
+    prov.__offline_cache_dir__ = tmp_path
+    captured_params = []
+
+    def side_effect(url: str, **kwargs):
+        if "signin" in url:
+            return _mock_signin_response()
+        if "/search" in url:
+            return _mock_json_response(SAMPLE_SEARCH_RESPONSE)
+        captured_params.append((url, kwargs.get("params", {})))
+        return _mock_json_response(SAMPLE_CAMPSITES_RESPONSE)
+
+    with mock.patch.object(prov.session, "get", side_effect=side_effect):
+        campgrounds = prov.find_campgrounds(search_string="Horsetooth", verbose=False)
+        assert len(campgrounds) == 1
+        assert campgrounds[0].facility_id == 710105
+        assert campgrounds[0].facility_name == "Horsetooth Reservoir"
+        assert campgrounds[0].recreation_area == "Larimer County Agency"
+        assert 50022 not in prov.reserveamerica_campgrounds
+
+        target_date = datetime.date(2027, 6, 10)
+        campsites = prov.get_campsites(
+            campground_id=710105,
+            start_date=target_date,
+            end_date=target_date + datetime.timedelta(days=1),
+            equipment=[("Trailer", 25)],
+        )
+        assert len(campsites) == 3
+        assert len(captured_params) == 1
+        req_url, req_params = captured_params[0]
+        assert "/products/LARC/710105/campsites" in req_url
+        assert req_params["pa99999"] == 2002
+        assert req_params["pa109"] == 25
+        for camp in campsites:
+            assert camp.facility_id == 710105
+            assert camp.facility_name == "Horsetooth Reservoir"
+            assert camp.booking_url.startswith(
+                "https://www.larimercamping.com/camping/horsetooth-reservoir/r/facilityDetails.do"
+            )
+            assert "arrivalDate=2027-06-10" in camp.booking_url
+
+
+def test_search_larimer_county_end_to_end(tmp_path: pathlib.Path) -> None:
+    """
+    Verify SearchLarimerCounty returns consolidated AvailableCampsite instances for Horsetooth Reservoir
+    """
+    window = SearchWindow(
+        start_date=datetime.date(2027, 6, 10),
+        end_date=datetime.date(2027, 6, 11),
+    )
+
+    def side_effect(url: str, **kwargs):
+        if "signin" in url:
+            return _mock_signin_response()
+        if "/search" in url:
+            return _mock_json_response(SAMPLE_SEARCH_RESPONSE)
+        return _mock_json_response(SAMPLE_CAMPSITES_RESPONSE)
+
+    with mock.patch.object(
+        LarimerCounty, "__offline_cache_dir__", tmp_path
+    ), mock.patch("requests.Session.get", side_effect=side_effect):
+        searcher = SearchLarimerCounty(
+            search_window=window,
+            campgrounds=[710105],
+            equipment=[("Trailer", 25)],
+        )
+        results = searcher.get_all_campsites()
+        assert len(results) == 3
+        assert all(r.facility_id == 710105 for r in results)

@@ -11,7 +11,11 @@ from dateutil.relativedelta import relativedelta
 
 from camply.containers import AvailableCampsite, RecreationArea, SearchWindow
 from camply.containers.data_containers import ListedCampsite
-from camply.providers.reserve_america import ColoradoStateParks, ReserveAmerica
+from camply.providers.reserve_america import (
+    ColoradoStateParks,
+    LarimerCounty,
+    ReserveAmerica,
+)
 from camply.search.base_search import BaseCampingSearch
 from camply.utils import logging_utils, make_list
 from camply.utils.logging_utils import format_log_string, log_sorted_response
@@ -162,3 +166,11 @@ class SearchColoradoStateParks(SearchReserveAmerica):
     """
 
     provider_class = ColoradoStateParks
+
+
+class SearchLarimerCounty(SearchReserveAmerica):
+    """
+    Searches on larimercamping.com / ReserveAmerica for Larimer County Campsites
+    """
+
+    provider_class = LarimerCounty

@@ -24,6 +24,7 @@ CAMPLY_BIN="${CAMPLY_BIN:-camply}"
 # ------------------------------------------------------------------------------
 # Provider to search against. Common options:
 #   - "ColoradoStateParks" : Colorado Parks & Wildlife (CPW / ReserveAmerica)
+#   - "LarimerCounty"      : Larimer County Parks (larimercamping.com / LARC)
 #   - "ReserveAmerica"     : Other ReserveAmerica state parks
 #   - "RecreationDotGov"   : Federal parks/forests (USFS, NPS, BLM, Army Corps)
 #   - "Yellowstone"        : Yellowstone National Park Lodges / Campgrounds

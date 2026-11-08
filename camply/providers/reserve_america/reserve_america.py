@@ -456,7 +456,7 @@ class ReserveAmerica(BaseProvider):
                     try:
                         parsed_len = int(round(float(eq_len)))
                         if parsed_len > 0:
-                            extra_params["109"] = parsed_len
+                            extra_params["pa109"] = parsed_len
                     except (ValueError, TypeError):
                         pass
 
@@ -684,3 +684,14 @@ class ColoradoStateParks(ReserveAmerica):
     state_code = "CO"
     contract_code = "CO"
     verifiable_only = True
+
+
+class LarimerCounty(ReserveAmerica):
+    """
+    Larimer County Parks (larimercamping.com via ReserveAmerica)
+    """
+
+    state_code = "CO"
+    contract_code = ReserveAmericaConfig.LARIMER_CONTRACT
+    verifiable_only = True
+    booking_base_url = ReserveAmericaConfig.LARIMER_BASE_URL

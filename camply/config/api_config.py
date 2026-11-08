@@ -218,6 +218,8 @@ class ReserveAmericaConfig(APIConfig):
     DATE_FORMAT: str = "%Y-%m-%d"
     DEFAULT_STATE: str = "CO"
     DEFAULT_CONTRACT: str = "CO"
+    LARIMER_BASE_URL: str = "https://www.larimercamping.com"
+    LARIMER_CONTRACT: str = "LARC"
     REQUEST_CLIENT_HEADER: Dict[str, str] = {
         "Ao-Requestclient": "RA Camping_4.20.0.3_Android_ALL"
     }

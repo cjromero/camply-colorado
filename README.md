@@ -108,6 +108,9 @@ service that lists camping and recreation inventory.
 - **`FairfaxCountyParks`**: Searches on [fairfax.usedirect.com](https://fairfax.usedirect.com) for Campsites (Virginia)
 - **`MaricopaCountyParks`**: Searches on [MaricopaCountyParks.org](https://maricopacountyparks.org) for Campsites (Arizona)
 - **`OregonMetro`**: Searches on [OregonMetro.gov](https://oregonmetro.gov) for Campsites (Portland Metro)
+- **`ReserveAmerica`**: Searches on [ReserveAmerica.com](https://www.reserveamerica.com) for State & County Park Campsites
+- **`ColoradoStateParks`**: Searches on [CPWShop.com](https://www.cpwshop.com) / ReserveAmerica for Colorado State Parks Campsites
+- **`LarimerCounty`**: Searches on [LarimerCamping.com](https://www.larimercamping.com/unifSearch.do) for Larimer County Parks Campsites (Colorado)
 - **`RecreationDotGovTicket`**: Searches on [Recreation.gov](https://recreation.gov) for Tickets and Tours
 - **`RecreationDotGovTimedEntry`**: Searches on [Recreation.gov](https://recreation.gov) for Timed Entries
 

@@ -15,6 +15,7 @@ from camply.search.search_recreationdotgov import (
 )
 from camply.search.search_reserve_america import (
     SearchColoradoStateParks,
+    SearchLarimerCounty,
     SearchReserveAmerica,
 )
 from camply.search.search_usedirect import (
@@ -59,6 +60,7 @@ __search_providers__: List[Type[BaseCampingSearch]] = [
     # ReserveAmerica
     SearchReserveAmerica,
     SearchColoradoStateParks,
+    SearchLarimerCounty,
 ]
 
 CAMPSITE_SEARCH_PROVIDER: Dict[str, Type[BaseCampingSearch]] = {
